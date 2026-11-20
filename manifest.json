@@ -1,0 +1,11 @@
+[
+    {
+        "name": "Spicetify QuickCSS",
+        "description": "Spicetify extension for live-reloading custom CSS",
+        "preview": "preview.gif",
+        "main": "quickCss.js",
+        "readme": "README.md",
+        "authors": [{ "name": "b3hav1","url": "https://github.com/b3hav1" }],
+        "tags": ["css", "utility", "development"]
+    }
+]
