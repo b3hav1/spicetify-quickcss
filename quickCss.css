@@ -1,0 +1,239 @@
+:root {
+    /* Main Window */
+    --window-margin: 4px;   /* Main window margin */
+    --border-radius: 8px;   /* Overall border radius */
+
+    /* Top Bar */
+    --button-scale: 75%;    /* Top bar buttons scale */
+    --home-i-margin: 8px;   /* Home icon inline margin */
+    --home-b-margin: 2px;   /* Home icon block margin */
+    --loupe-i-margin: 6px;  /* Loupe icon inline margin */
+    --loupe-b-margin: 3px;  /* Loupe icon block margin */
+    --search-margin: 8px;   /* Search bar top margin */
+    --search-height: 36px;  /* Search bar form height */
+    --profile-margin: 16px; /* Top bar profile margin */
+    --view-margin: 16px;    /* Main window padding */
+
+    /* Now Playing */
+    --player-height: 64px;  /* Now playing bar height */
+    --cover-scale: 75%;     /* Now playing cover scale */
+    --track-scale: 125%;    /* Now playing info scale */
+    --track-margin: 20px;   /* Now playing info margin */
+    --slider-margin: 8px;   /* Playback slider margin */
+    --control-margin: 4px;  /* Playback control margin */
+
+    /* Math (do not touch) */
+    --home-i-margin-neg: calc(var(--home-i-margin) * -1);
+    --loupe-i-margin-neg: calc(var(--loupe-i-margin) * -1);
+    --loupe-b-margin-neg: calc(var(--loupe-b-margin) * -1);
+    --window-margin-neg: calc(var(--window-margin) * -1);
+    --slider-margin-neg: calc(var(--slider-margin) * -1);
+
+    /*
+        --home-b-margin-neg: calc(var(--home-b-margin) * -1);
+        --profile-margin-neg: calc(var(--profile-margin) * -1);
+        --track-margin-neg: calc(var(--track-margin) * -1);
+        --control-margin-neg: calc(var(--control-margin) * -1);
+        --view-margin-neg: calc(var(--view-margin) * -1);
+    */
+}
+
+/* #region General */
+/* Eintre text */
+* {
+    text-decoration: none !important;
+}
+
+/* Main window */
+[class^="Root"] {
+    padding: 0 !important;
+    border-radius: 0 !important;
+}
+
+/* Scrollbars */
+[class^="os-scrollbar"] {
+    display: none !important;
+}
+/* #endregion */
+
+
+/* #region Top Bar */
+/* Top bar history buttons */
+:not([class^="main-globalNav-contentRight"]) {
+    & > [class^="main-globalNav-navLink"] {
+        display: none !important;
+    }
+}
+
+/* Top bar Spicetify buttons */
+[class^="custom-navlinks-scrollable_container"] * {
+    display: none !important;
+}
+
+/* Top bar Home button */
+[class^="main-globalNav-searchContainer"] {
+    & > :nth-child(1) {
+        background: none !important;
+        scale: var(--button-scale) !important;
+        margin-top: var(--home-b-margin) !important;
+        margin-right: var(--home-i-margin-neg) !important;
+    }
+}
+
+/* Top bar Search button */
+[class^="main-globalNav-searchInputSection"] > form {
+    & > :nth-child(1) {
+        scale: var(--button-scale) !important;
+        margin-top: var(--loupe-b-margin-neg) !important;
+        margin-left: var(--loupe-i-margin-neg) !important;
+    }
+
+    /* Top bar Browse button */
+    & > :nth-child(3) {
+        display: none !important;
+    }
+}
+
+/* Top bar Search bar container */
+[class^="main-globalNav-searchInputWrapper"] input {
+    margin-top: var(--search-margin) !important;
+    min-height: var(--search-height) !important;
+    padding-left: var(--search-height) !important;
+}
+
+/* Top bar Searh bar shortcut */
+[class^="main-globalNav-searchInputWrapper"] kbd {
+    display: none !important;
+}
+
+/* Top bar Search bar border */
+[class^="main-globalNav-searchInputWrapper"] * {
+    box-shadow: none !important;
+}
+
+/* Top bar Profile section */
+[class^="main-globalNav-contentRight"] {
+    & > [class^="main-globalNav-navLink"] {
+        margin-right: var(--profile-margin) !important;
+    }
+}
+
+/* Top bar Profile button */
+[data-testid^="user-widget-link"] {
+    background: none !important;
+}
+/* #endregion */
+
+
+/* #region Left Sidebar */
+/* Left sidebar background */
+[class^="Root__nav-bar"] {
+    margin-right: var(--window-margin-neg) !important;
+}
+
+/* Left sidebar container */
+[class^="main-yourLibraryX-entryPoints"] {
+    border-radius: 0 !important;
+    border-top-right-radius: var(--border-radius) !important;
+}
+
+/* Left sidebar header */
+[class^="main-yourLibraryX-header"] {
+    padding-bottom: 0 !important;
+}
+
+/* Left sidebar Add button */
+[class^="main-yourLibraryX-headerContent"] {
+    & > :nth-child(2) {
+        display: none !important;
+    }
+}
+
+/* Left sidebar items covers */
+[class^="x-entityImage-imageContainer"] {
+    border-radius: var(--border-radius) !important;
+}
+/* #endregion */
+
+
+/* #region Now Playing Bar */
+/* Now playing background */
+[class^="Root__now-playing-bar"] {
+    margin-top: var(--window-margin-neg) !important;
+}
+
+/* Now playing container */
+[class^="main-nowPlayingBar-container"] {
+    position: relative !important;
+    height: var(--player-height) !important;
+}
+
+/* Now playing container */
+[class^="main-nowPlayingBar-nowPlayingBar"] {
+    border-radius: 0 !important;
+}
+
+/* Now playing track cover */
+[class*="main-coverSlotCollapsed-container"] {
+    margin: 0 !important;
+    scale: var(--cover-scale) !important;
+    border-radius: var(--border-radius) !important;
+}
+
+/* Now playing track info */
+[class^="main-nowPlayingWidget-trackInfo"] {
+    margin-inline: var(--track-margin) !important;
+    scale: var(--track-scale) !important;
+}
+
+/* Now playing track slider */
+[class^="playback-bar"] {
+    width: 100% !important;
+    position: absolute !important;
+    top: var(--slider-margin-neg) !important;
+}
+
+/* Now playing track time */
+[data-testid^="playback-position"],
+[data-testid^="playback-duration"] {
+    display: none !important;
+}
+
+/* Now playing control buttons */
+[class^="player-controls__buttons"] {
+    position: relative !important;
+    top: var(--control-margin) !important;
+}
+
+/* Now playing connect button */
+[aria-describedby^="connect-message-nudge"] {
+    display: none !important;
+}
+/* #endregion */
+
+
+/* #region Main View */
+[class^="Root__main-view"] {
+    border-top-left-radius: var(--border-radius) !important;
+}
+
+/* Main view solid background */
+div:has(+ [data-testid="home-ads-container"]) {
+    display: none !important;
+}
+
+/* Main view category buttons */
+[data-testid="home-ads-container"] + div + div {
+    display: none !important;
+}
+
+/* Main view container */
+[class^="main-home-content"] {
+    padding: var(--view-margin) !important;
+}
+
+/* Main view cards text */
+[class^="main-card-imageContainer"] + div {
+    display: none !important;
+}
+/* #endregion */
