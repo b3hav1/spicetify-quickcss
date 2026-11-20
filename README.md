@@ -1,5 +1,7 @@
 # Spicetify QuickCSS
 
+![Preview](preview.gif)
+
 A lightweight, zero-dependency **Spicetify extension** for live-reloading custom CSS in Spotify without restarting the client. **Why QuickCSS instead of built-in Snippets?** - They are lacks for active development because editing inside the built-in modal lacks syntax highlighting, autosuggestion, formatting, and proper search/replace.
 
 ## Features
