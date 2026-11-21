@@ -1,11 +1,13 @@
 (function quickCss() {
     // #region Settings
     const CONFIG = {
-        timeout: 100,
-        styleId: "quickcss",
-        styleKey: "quickсss",
-        stateKey: "quickcss-enabled",
-        language: "auto",
+        toasts: true,                 // Show notifications
+        language: "auto",             // auto, en, ru, de
+
+        timeout: 100,                 // Timeout & waiting
+        styleId: "quickcss",          // QuickCSS element id
+        styleKey: "quickсss",         // QuickCSS storage key
+        stateKey: "quickcss-enabled", // QuickCSS state key
 
         shortcuts: {
             selectFile: { key: "o", ctrl: true, shift: true },
@@ -82,6 +84,13 @@
     });
     observer.observe(document.head, {childList: true});
 
+    // Wrapper for Spicetify show notification
+    async function showNotification(message) {
+        if (CONFIG.toasts) {
+            Spicetify.showNotification(message);
+        }
+    }
+
     // Select CSS file via file system dialog
     async function selectFile() {
         try {
@@ -94,7 +103,7 @@
 
             lastModified = 0;
             if (!isEnabled) toggleCss();
-            Spicetify.showNotification(t.loaded(fileHandle.name));
+            showNotification(t.loaded(fileHandle.name));
         }
 
         catch {
@@ -108,7 +117,7 @@
         styleEl.disabled = !isEnabled;
 
         localStorage.setItem(CONFIG.stateKey, isEnabled);
-        Spicetify.showNotification(isEnabled ? t.enabled : t.disabled);
+        showNotification(isEnabled ? t.enabled : t.disabled);
     }
 
     // Monitor file changes on disk every N ms
