@@ -1,27 +1,34 @@
 (function quickCss() {
-    const TIMEOUT = 100;
-    const STYLE_ID = "quickcss";
-    const STYLE_KEY = "quickcss";
-    const STATE_KEY = "quickcss-enabled";
+    const CONFIG = {
+        timeout: 100,
+        styleId: "quickcss",
+        styleKey: "quickсss",
+        stateKey: "quickcss-enabled",
+
+        shortcuts: {
+            selectFile: { key: "o", ctrl: true, shift: true },
+            toggleCss: { key: "p", ctrl: true, shift: true }
+        }
+    };
 
 
     // #region Init Logic
     // Waiting for Spicetify interface to load
     if (!document.head || !Spicetify?.Keyboard) {
-        setTimeout(quickCss, TIMEOUT);
+        setTimeout(quickCss, CONFIG.timeout);
         return;
     }
 
     // Initialize custom CSS and state if exists
-    let styleEl = document.getElementById(STYLE_ID);
-    let isEnabled = localStorage.getItem(STATE_KEY) !== "false";
+    let styleEl = document.getElementById(CONFIG.styleId);
+    let isEnabled = localStorage.getItem(CONFIG.stateKey) !== "false";
 
     // Create <style> tag and load localStorage cache
     if (!styleEl) {
         styleEl = document.createElement("style");
-        styleEl.textContent = localStorage.getItem(STYLE_KEY) || "";
+        styleEl.textContent = localStorage.getItem(CONFIG.styleKey) || "";
 
-        styleEl.id = STYLE_ID;
+        styleEl.id = CONFIG.styleId;
         document.head.appendChild(styleEl);
     }
 
@@ -44,7 +51,7 @@
     observer.observe(document.head, {childList: true});
 
     // Select CSS file via file system dialog
-    async function showFilePicker() {
+    async function selectFile() {
         try {
             [fileHandle] = await window.showOpenFilePicker
             ({
@@ -68,7 +75,7 @@
         isEnabled = !isEnabled;
         styleEl.disabled = !isEnabled;
 
-        localStorage.setItem(STATE_KEY, isEnabled);
+        localStorage.setItem(CONFIG.stateKey, isEnabled);
         Spicetify.showNotification(`QuickCSS ${isEnabled ? "enabled" : "disabled"}`)
     }
 
@@ -84,7 +91,7 @@
                 const css = await file.text();
 
                 styleEl.textContent = css;
-                localStorage.setItem(STYLE_KEY, css);
+                localStorage.setItem(CONFIG.styleKey, css);
             }
         }
 
@@ -92,23 +99,21 @@
             // Ignore temporary editor file lock
         }
 
-    }, TIMEOUT);
+    }, CONFIG.timeout);
     // #endregion
 
 
     // #region UI & Hotkeys
     // Show file picker hotkey
-    Spicetify.Keyboard.registerShortcut({
-        key: "o",
-        ctrl: true,
-        shift: true
-    }, showFilePicker);
+    Spicetify.Keyboard.registerShortcut(
+        CONFIG.shortcuts.selectFile,
+        selectFile
+    );
 
     // Toggle QuickCSS hotkey
-    Spicetify.Keyboard.registerShortcut({
-        key: "p",
-        ctrl: true,
-        shift: true
-    }, toggleCss);
+    Spicetify.Keyboard.registerShortcut(
+        CONFIG.shortcuts.toggleCss,
+        toggleCss
+    );
     // #endregion
 })();
