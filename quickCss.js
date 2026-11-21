@@ -1,15 +1,41 @@
 (function quickCss() {
+    // #region Settings
     const CONFIG = {
         timeout: 100,
         styleId: "quickcss",
         styleKey: "quickсss",
         stateKey: "quickcss-enabled",
+        language: "auto",
 
         shortcuts: {
             selectFile: { key: "o", ctrl: true, shift: true },
             toggleCss: { key: "p", ctrl: true, shift: true }
         }
     };
+
+    const LOCALES = {
+        en: {
+            pickerDesc: "CSS Files",
+            enabled: "QuickCSS enabled",
+            disabled: "QuickCSS disabled",
+            loaded: (name) => `QuickCSS loaded: ${name}`
+        },
+
+        ru: {
+            pickerDesc: "CSS-файлы",
+            enabled: "QuickCSS включен",
+            disabled: "QuickCSS выключен",
+            loaded: (name) => `QuickCSS загружен: ${name}`
+        },
+
+        de: {
+            dialogDesc: "CSS-Dateien",
+            enabled: "QuickCSS aktiviert",
+            disabled: "QuickCSS deaktiviert",
+            loaded: (name) => `QuickCSS geladen: ${name}`
+        }
+    };
+    // #endregion
 
 
     // #region Init Logic
@@ -18,6 +44,12 @@
         setTimeout(quickCss, CONFIG.timeout);
         return;
     }
+
+    // Set extension language from config or Spotify
+    const language = CONFIG.lang === "auto"
+        ? (Spicetify.Locale?.getLocale?.()?.slice(0, 2) || "en")
+        : CONFIG.language;
+    const t = LOCALES[language] || LOCALES.en;
 
     // Initialize custom CSS and state if exists
     let styleEl = document.getElementById(CONFIG.styleId);
@@ -55,14 +87,14 @@
         try {
             [fileHandle] = await window.showOpenFilePicker
             ({
-                types: [{ description: "CSS Files",
+                types: [{ description: t.pickerDesc,
                 accept: {"text/css": [".css"]} }],
                 multiple: false
             });
 
             lastModified = 0;
             if (!isEnabled) toggleCss();
-            Spicetify.showNotification(`QuickCSS loaded: ${fileHandle.name}`);
+            Spicetify.showNotification(t.loaded(fileHandle.name));
         }
 
         catch {
@@ -76,7 +108,7 @@
         styleEl.disabled = !isEnabled;
 
         localStorage.setItem(CONFIG.stateKey, isEnabled);
-        Spicetify.showNotification(`QuickCSS ${isEnabled ? "enabled" : "disabled"}`)
+        Spicetify.showNotification(isEnabled ? t.enabled : t.disabled);
     }
 
     // Monitor file changes on disk every N ms
@@ -104,13 +136,11 @@
 
 
     // #region UI & Hotkeys
-    // Show file picker hotkey
     Spicetify.Keyboard.registerShortcut(
         CONFIG.shortcuts.selectFile,
         selectFile
     );
 
-    // Toggle QuickCSS hotkey
     Spicetify.Keyboard.registerShortcut(
         CONFIG.shortcuts.toggleCss,
         toggleCss
