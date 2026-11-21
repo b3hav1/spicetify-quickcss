@@ -4,15 +4,17 @@
     const STYLE_KEY = "quickcss";
     const STATE_KEY = "quickcss-enabled";
 
+
+    // #region Init Logic
     // Waiting for Spicetify interface to load
     if (!document.head || !Spicetify?.Keyboard) {
         setTimeout(quickCss, TIMEOUT);
         return;
     }
 
-    let lastModified = 0;
-    let fileHandle = null;
+    // Initialize custom CSS and state if exists
     let styleEl = document.getElementById(STYLE_ID);
+    let isEnabled = localStorage.getItem(STATE_KEY) !== "false";
 
     // Create <style> tag and load localStorage cache
     if (!styleEl) {
@@ -23,9 +25,14 @@
         document.head.appendChild(styleEl);
     }
 
-    let isEnabled = localStorage.getItem(STATE_KEY) !== "false";
+    // Initialize file API variables and reset state
+    let lastModified = 0;
+    let fileHandle = null;
     styleEl.disabled = !isEnabled;
+    // #endregion
 
+
+    // #region Core Logic
     // Place tag at very end of <head> section
     const observer = new MutationObserver(() => {
         if (document.head.lastElementChild !== styleEl) {
@@ -35,15 +42,6 @@
         }
     });
     observer.observe(document.head, {childList: true});
-
-    // Toggle QuickCSS using keyboard hotkey
-    function toggleCss() {
-        isEnabled = !isEnabled;
-        styleEl.disabled = !isEnabled;
-
-        localStorage.setItem(STATE_KEY, isEnabled);
-        Spicetify.showNotification(`QuickCSS ${isEnabled ? "enabled" : "disabled"}`)
-    }
 
     // Select CSS file via file system dialog
     async function showFilePicker() {
@@ -56,6 +54,7 @@
             });
 
             lastModified = 0;
+            if (!isEnabled) toggleCss();
             Spicetify.showNotification(`QuickCSS loaded: ${fileHandle.name}`);
         }
 
@@ -64,21 +63,16 @@
         }
     }
 
-    // Show file picker hotkey (Ctrl+Shift+O)
-    Spicetify.Keyboard.registerShortcut({
-        key: "o",
-        ctrl: true,
-        shift: true
-    }, showFilePicker);
+    // Toggle QuickCSS using keyboard hotkey
+    function toggleCss() {
+        isEnabled = !isEnabled;
+        styleEl.disabled = !isEnabled;
 
-    // Toggle QuickCSS hotkey (Ctrl+Shift+P)
-    Spicetify.Keyboard.registerShortcut({
-        key: "p",
-        ctrl: true,
-        shift: true
-    }, toggleCss);
+        localStorage.setItem(STATE_KEY, isEnabled);
+        Spicetify.showNotification(`QuickCSS ${isEnabled ? "enabled" : "disabled"}`)
+    }
 
-    // Monitor file changes on disk every TIMEOUT ms
+    // Monitor file changes on disk every N ms
     setInterval(async() => {
         if (!fileHandle) return;
 
@@ -99,4 +93,22 @@
         }
 
     }, TIMEOUT);
+    // #endregion
+
+
+    // #region UI & Hotkeys
+    // Show file picker hotkey
+    Spicetify.Keyboard.registerShortcut({
+        key: "o",
+        ctrl: true,
+        shift: true
+    }, showFilePicker);
+
+    // Toggle QuickCSS hotkey
+    Spicetify.Keyboard.registerShortcut({
+        key: "p",
+        ctrl: true,
+        shift: true
+    }, toggleCss);
+    // #endregion
 })();
